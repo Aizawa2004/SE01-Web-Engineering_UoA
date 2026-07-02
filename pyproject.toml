@@ -1,0 +1,31 @@
+[project]
+name = "theblog"
+version = "0.1.0"
+description = "A shared blog space web application"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "coverage>=7.14.3",
+    "ruff>=0.15.20",
+]
+
+# --- Ruff Configuration ---
+[tool.ruff]
+line-length = 88
+exclude = [
+    ".venv",
+    ".git",
+    "__pycache__",
+    "migrations",
+]
+
+# --- Coverage Configuration ---
+[tool.coverage.run]
+omit = [
+    "*/migrations/*",
+    "*/tests/*",
+    "manage.py",
+]
