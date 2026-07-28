@@ -18,6 +18,9 @@ __pycache__/
 htmlcov/
 .pytest_cache/
 
+# Collected static files
+staticfiles/
+
 #
 *.sqlite3
 db.sqlite3
