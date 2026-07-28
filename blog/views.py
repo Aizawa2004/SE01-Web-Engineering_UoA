@@ -48,9 +48,10 @@ def post_list(request):
 		.order_by("username")
 	)
 	querystring = _build_querystring(request)
+	template_name = "blog/partials/post_list_content.html" if request.htmx else "blog/post_list.html"
 	return render(
 		request,
-		"blog/post_list.html",
+		template_name,
 		{
 			"posts": page_obj.object_list,
 			"authors": authors,

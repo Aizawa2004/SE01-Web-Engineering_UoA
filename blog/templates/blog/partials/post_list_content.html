@@ -1,0 +1,44 @@
+{% if posts %}
+	<div class="post-grid">
+		{% for post in posts %}
+			<article class="post-card">
+				<h3>{{ post.title }}</h3>
+				<p class="post-meta">
+					<a
+						href="?author={{ post.author.username }}"
+						hx-get="?author={{ post.author.username }}"
+						hx-target="#post-list-container"
+						hx-push-url="true"
+					>{{ post.author.username }}</a>
+					<span class="post-timestamp">{{ post.created_at|date:"Y-m-d-H:i" }}</span>
+				</p>
+				<p>{{ post.content }}</p>
+			</article>
+		{% endfor %}
+	</div>
+	{% if is_paginated %}
+		<nav class="pagination" aria-label="Pagination">
+			{% if page_obj.has_previous %}
+				<a
+					class="pagination-link"
+					href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.previous_page_number }}"
+					hx-get="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.previous_page_number }}"
+					hx-target="#post-list-container"
+					hx-push-url="true"
+				>Previous</a>
+			{% endif %}
+			<span class="pagination-status">Page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
+			{% if page_obj.has_next %}
+				<a
+					class="pagination-link"
+					href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.next_page_number }}"
+					hx-get="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.next_page_number }}"
+					hx-target="#post-list-container"
+					hx-push-url="true"
+				>Next</a>
+			{% endif %}
+		</nav>
+	{% endif %}
+{% else %}
+	<p>No posts yet.</p>
+{% endif %}

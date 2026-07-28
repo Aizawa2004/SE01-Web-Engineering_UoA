@@ -6,8 +6,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>TheBlog</title>
 	<link rel="stylesheet" href="{% static 'blog/style.css' %}">
+	<script src="https://unpkg.com/htmx.org@1.9.12" defer></script>
 </head>
-<body>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
 	<header class="site-header">
 		<div class="container header-inner">
 			<h1 class="site-title"><a href="{% url 'post-list' %}">TheBlog</a></h1>
