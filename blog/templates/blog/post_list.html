@@ -46,6 +46,7 @@
 						<h3>{{ post.title }}</h3>
 						<p class="post-meta">
 							<a href="?author={{ post.author.username }}">{{ post.author.username }}</a>
+							<span class="post-timestamp">{{ post.created_at|date:"Y-m-d-H:i" }}</span>
 						</p>
 						<p>{{ post.content }}</p>
 					</article>
