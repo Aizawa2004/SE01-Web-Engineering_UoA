@@ -24,6 +24,11 @@ def env_bool(name, default=False):
     return value.lower() in {"1", "true", "yes", "on"}
 
 
+def env_csv(name, default):
+    value = os.getenv(name, default)
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -35,12 +40,15 @@ SECRET_KEY = os.getenv(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env_bool("DEBUG", default=False)
 
-# 環境変数 ALLOWED_HOSTS があればそれをカンマ区切りで読み込み、
-# なければローカルと Render の独自ドメインをデフォルトで許可する
-ALLOWED_HOSTS = os.getenv(
+ALLOWED_HOSTS = env_csv(
     "ALLOWED_HOSTS",
-    "localhost,127.0.0.1,theblog-se01-web-engineering-uoa.onrender.com"
-).split(",")
+    "localhost,127.0.0.1,theblog-se01-web-engineering-uoa.onrender.com",
+)
+
+CSRF_TRUSTED_ORIGINS = env_csv(
+    "CSRF_TRUSTED_ORIGINS",
+    "https://theblog-se01-web-engineering-uoa.onrender.com",
+)
 
 
 # Application definition
