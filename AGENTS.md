@@ -108,7 +108,7 @@ Mandatory requirements for all implementation phases:
 - No security rule violations listed in Section 6.
 
 ## 9. Current Phase Scope Control
-Current project phase is Exercise 5: project initialization and database schema baseline.
+Current project phase is Exercise 6: writing basic view functions and URL routing.
 
 Completed in this phase:
 - Django project initialized at repository root.
@@ -117,9 +117,12 @@ Completed in this phase:
 - Post model registered in Django admin.
 - Initial migrations generated and applied to SQLite database.
 - Basic model unit tests added and passing.
+- Basic view functions implemented for list, author filter, date filter, and dummy create flows.
+- URL routing connected from config.urls to blog.urls.
+- View-level tests added and passing.
 
 Out of scope for this phase:
-- URL/view/template implementation for list/filter/search flows
+- HTML template rendering
 - HTMX interaction wiring
 - End-to-end UI implementation
 
@@ -136,3 +139,9 @@ Out of scope for this phase:
 - Initial schema migration: blog/migrations/0001_initial.py
 - Local database file: db.sqlite3
 - Model tests: blog/tests.py
+
+## 12. Exercise 6 View API Summary
+- GET / -> post-list: returns all posts as plain text lines in "title by author" format.
+- GET /author/<username>/ -> post-list-by-author: returns only posts for the given username.
+- GET /date/<YYYY-MM-DD>/ -> post-list-by-date: returns only posts whose created_at date matches the path date.
+- GET /post/new/ -> post-create-dummy: creates a fixed dummy post and redirects to post-list.
