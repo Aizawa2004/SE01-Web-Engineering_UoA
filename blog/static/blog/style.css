@@ -267,6 +267,40 @@ button:hover {
 	margin-top: 0;
 }
 
+.pagination {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.75rem;
+	margin-top: 1rem;
+	padding-top: 0.75rem;
+	border-top: 1px solid var(--border);
+	font-size: 0.92rem;
+	color: var(--muted);
+}
+
+.pagination-link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.4rem 0.7rem;
+	border-radius: 0.45rem;
+	border: 1px solid var(--border);
+	background: var(--surface);
+	color: var(--text);
+	text-decoration: none;
+}
+
+.pagination-link:hover {
+	background: #edf3fb;
+	border-color: #c7d3e3;
+}
+
+.pagination-status {
+	font-weight: 600;
+	white-space: nowrap;
+}
+
 @media (max-width: 600px) {
 	.header-inner {
 		flex-direction: column;

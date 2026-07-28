@@ -1,11 +1,21 @@
 from datetime import datetime
 
+from django.core.paginator import Paginator
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from .forms import PostForm
 from .models import Post
+
+
+POSTS_PER_PAGE = 5
+
+
+def _build_querystring(request):
+	query_params = request.GET.copy()
+	query_params.pop("page", None)
+	return query_params.urlencode()
 
 
 def post_list(request):
@@ -28,22 +38,30 @@ def post_list(request):
 	if search_query:
 		posts = posts.filter(title__icontains=search_query)
 
+	paginator = Paginator(posts, POSTS_PER_PAGE)
+	page_obj = paginator.get_page(request.GET.get("page"))
+
 	authors = (
 		get_user_model()
 		.objects.filter(post__isnull=False)
 		.distinct()
 		.order_by("username")
 	)
+	querystring = _build_querystring(request)
 	return render(
 		request,
 		"blog/post_list.html",
 		{
-			"posts": posts,
+			"posts": page_obj.object_list,
 			"authors": authors,
 			"page_title": "All Posts",
 			"selected_author": author_username,
 			"selected_date": date_str,
 			"search_query": search_query,
+			"page_obj": page_obj,
+			"paginator": paginator,
+			"is_paginated": page_obj.has_other_pages(),
+			"querystring": querystring,
 		},
 	)
 
