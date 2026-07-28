@@ -184,6 +184,89 @@ button:hover {
 	color: var(--muted);
 }
 
+.layout-shell {
+	display: grid;
+	grid-template-columns: 240px 1fr;
+	gap: 1rem;
+	align-items: start;
+}
+
+.filter-panel,
+.author-panel {
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: 0.75rem;
+	padding: 0.75rem;
+	box-shadow: var(--shadow);
+	margin-bottom: 0.75rem;
+}
+
+.filter-panel h2,
+.author-panel h3 {
+	margin: 0 0 0.6rem;
+	font-size: 0.95rem;
+	font-weight: 700;
+	color: var(--muted);
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+.filter-form {
+	padding: 0.75rem;
+	font-size: 0.92rem;
+}
+
+.author-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: grid;
+	gap: 0.4rem;
+}
+
+.author-list a {
+	display: inline-block;
+	padding: 0.3rem 0.55rem;
+	border-radius: 0.4rem;
+	background: #f2f6fb;
+	color: var(--accent-strong);
+	text-decoration: none;
+	font-size: 0.92rem;
+}
+
+.author-list a:hover {
+	background: #e3edf8;
+}
+
+.filter-form select,
+.filter-form input[type="date"],
+.filter-form input[type="search"] {
+	width: 100%;
+	padding: 0.5rem 0.65rem;
+	border: 1px solid var(--border);
+	border-radius: 0.45rem;
+	font: inherit;
+	font-size: 0.95rem;
+	background: #fff;
+}
+
+.filter-form button {
+	padding: 0.5rem 0.75rem;
+	font-size: 0.92rem;
+	border-radius: 0.45rem;
+}
+
+.post-timestamp {
+	display: block;
+	margin-top: 0.15rem;
+	color: var(--muted);
+	font-size: 0.82rem;
+}
+
+.posts-panel h2 {
+	margin-top: 0;
+}
+
 @media (max-width: 600px) {
 	.header-inner {
 		flex-direction: column;
@@ -196,5 +279,9 @@ button:hover {
 
 	main.container {
 		padding-top: 1rem;
+	}
+
+	.layout-shell {
+		grid-template-columns: 1fr;
 	}
 }

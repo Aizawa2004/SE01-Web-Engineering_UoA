@@ -34,4 +34,5 @@ class InterfaceTemplateTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "<main", html=False)
         self.assertContains(response, 'class="post-card"')
-        self.assertContains(response, "Alpha Post by alice")
+        self.assertContains(response, "Alpha Post")
+        self.assertContains(response, '>alice<')
