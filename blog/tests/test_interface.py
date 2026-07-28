@@ -12,6 +12,7 @@ class InterfaceTemplateTests(TestCase):
         )
 
     def test_post_create_page_uses_base_layout_structure(self):
+        self.client.login(username="alice", password="password123")
         response = self.client.get(reverse("post-create"))
 
         self.assertEqual(response.status_code, 200)

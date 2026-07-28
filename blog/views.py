@@ -1,8 +1,8 @@
 from datetime import datetime
 
 from django.contrib.auth import get_user_model
-from django.shortcuts import render
-from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
 
 from .forms import PostForm
 from .models import Post
@@ -56,17 +56,13 @@ def post_create_dummy(request):
 	return redirect("post-list")
 
 
+@login_required
 def post_create(request):
 	if request.method == "POST":
 		form = PostForm(request.POST)
 		if form.is_valid():
-			author = get_user_model().objects.order_by("id").first()
-			if author is None:
-				author = get_user_model().objects.create_user(
-					username="anonymous", password="password123"
-				)
 			Post.objects.create(
-				author=author,
+				author=request.user,
 				title=form.cleaned_data["title"],
 				content=form.cleaned_data["body"],
 			)
