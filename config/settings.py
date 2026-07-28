@@ -35,11 +35,12 @@ SECRET_KEY = os.getenv(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env_bool("DEBUG", default=False)
 
-ALLOWED_HOSTS = [
-    host.strip()
-    for host in os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
-    if host.strip()
-]
+# 環境変数 ALLOWED_HOSTS があればそれをカンマ区切りで読み込み、
+# なければローカルと Render の独自ドメインをデフォルトで許可する
+ALLOWED_HOSTS = os.getenv(
+    "ALLOWED_HOSTS",
+    "localhost,127.0.0.1,theblog-se01-web-engineering-uoa.onrender.com"
+).split(",")
 
 
 # Application definition
