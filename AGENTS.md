@@ -108,12 +108,20 @@ Mandatory requirements for all implementation phases:
 - No security rule violations listed in Section 6.
 
 ## 9. Current Phase Scope Control
-Current project phase is specification and AI-tooling hardening.
+Current project phase is Exercise 5: project initialization and database schema baseline.
+
+Completed in this phase:
+- Django project initialized at repository root.
+- blog app created and added to INSTALLED_APPS.
+- Post model implemented (author, title, content, created_at, __str__).
+- Post model registered in Django admin.
+- Initial migrations generated and applied to SQLite database.
+- Basic model unit tests added and passing.
 
 Out of scope for this phase:
-- Django project scaffolding
-- Model/view/template implementation
-- Migration execution
+- URL/view/template implementation for list/filter/search flows
+- HTMX interaction wiring
+- End-to-end UI implementation
 
 ## 10. Tech Stack
 - Python 3.11+
@@ -121,3 +129,10 @@ Out of scope for this phase:
 - HTMX
 - uv package manager
 - Ruff and Coverage for quality control
+
+## 11. Exercise 5 Deliverables
+- Django project scaffold files: manage.py, config/*
+- App scaffold files: blog/*
+- Initial schema migration: blog/migrations/0001_initial.py
+- Local database file: db.sqlite3
+- Model tests: blog/tests.py
