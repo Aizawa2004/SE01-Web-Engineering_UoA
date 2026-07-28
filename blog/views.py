@@ -2,32 +2,45 @@ from datetime import datetime
 
 from django.contrib.auth import get_user_model
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.shortcuts import redirect
 
 from .forms import PostForm
 from .models import Post
 
 
-def _format_posts(posts):
-	lines = [f"{post.title} by {post.author.username}" for post in posts]
-	return HttpResponse("\n".join(lines) if lines else "No posts yet.")
-
-
 def post_list(request):
 	posts = Post.objects.select_related("author").all()
-	return _format_posts(posts)
+	return render(
+		request,
+		"blog/post_list.html",
+		{"posts": posts, "page_title": "All Posts"},
+	)
 
 
 def post_list_by_author(request, username):
 	posts = Post.objects.select_related("author").filter(author__username=username)
-	return _format_posts(posts)
+	return render(
+		request,
+		"blog/post_list.html",
+		{"posts": posts, "page_title": f"Posts by {username}"},
+	)
 
 
 def post_list_by_date(request, date_str):
-	date = datetime.strptime(date_str, "%Y-%m-%d").date()
-	posts = Post.objects.select_related("author").filter(created_at__date=date)
-	return _format_posts(posts)
+	try:
+		date = datetime.strptime(date_str, "%Y-%m-%d").date()
+	except ValueError:
+		posts = Post.objects.none()
+		page_title = f"Posts on {date_str}"
+	else:
+		posts = Post.objects.select_related("author").filter(created_at__date=date)
+		page_title = f"Posts on {date.isoformat()}"
+
+	return render(
+		request,
+		"blog/post_list.html",
+		{"posts": posts, "page_title": page_title},
+	)
 
 
 def post_create_dummy(request):

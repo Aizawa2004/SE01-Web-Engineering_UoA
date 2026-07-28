@@ -1,25 +1,22 @@
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>Create Post</title>
-</head>
-<body>
-	<h1>Create Post</h1>
-	<form method="post">
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<section aria-labelledby="create-post-heading">
+	<h2 id="create-post-heading">Create Post</h2>
+	<form method="post" class="form-card">
 		{% csrf_token %}
 		{{ form.non_field_errors }}
-		<p>
-			{{ form.title.label_tag }}
+		<div class="form-row">
+			<label for="{{ form.title.id_for_label }}">Title</label>
 			{{ form.title }}
 			{{ form.title.errors }}
-		</p>
-		<p>
-			{{ form.body.label_tag }}
+		</div>
+		<div class="form-row">
+			<label for="{{ form.body.id_for_label }}">Body</label>
 			{{ form.body }}
 			{{ form.body.errors }}
-		</p>
+		</div>
 		<button type="submit">Save</button>
 	</form>
-</body>
-</html>
+</section>
+{% endblock %}
