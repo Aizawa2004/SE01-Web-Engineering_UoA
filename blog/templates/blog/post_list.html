@@ -4,7 +4,16 @@
 <div class="layout-shell">
 	<aside class="filter-panel" aria-labelledby="filter-heading">
 		<h2 id="filter-heading">Filters</h2>
-		<form method="get" class="filter-form form-card">
+		<form
+			method="get"
+			action="{% url 'post-list' %}"
+			class="filter-form form-card"
+			hx-get="{% url 'post-list' %}"
+			hx-target="#post-list-container"
+			hx-trigger="change from:select, change from:input[type=date], keyup changed delay:500ms from:input[name='q']"
+			hx-include="[name='q'], [name='author'], [name='date']"
+			hx-push-url="true"
+		>
 			<div class="form-row">
 				<label for="author-filter">Author</label>
 				<select id="author-filter" name="author">
@@ -29,7 +38,14 @@
 			<h3 id="authors-heading">Authors</h3>
 			<ul class="author-list">
 				{% for author in authors %}
-					<li><a href="?author={{ author.username }}">{{ author.username }}</a></li>
+					<li>
+						<a
+							href="?author={{ author.username }}"
+							hx-get="?author={{ author.username }}"
+							hx-target="#post-list-container"
+							hx-push-url="true"
+						>{{ author.username }}</a>
+					</li>
 				{% empty %}
 					<li>No authors yet.</li>
 				{% endfor %}
@@ -39,33 +55,9 @@
 
 	<section aria-labelledby="posts-heading" class="posts-panel">
 		<h2 id="posts-heading">{{ page_title }}</h2>
-		{% if posts %}
-			<div class="post-grid">
-				{% for post in posts %}
-					<article class="post-card">
-						<h3>{{ post.title }}</h3>
-						<p class="post-meta">
-							<a href="?author={{ post.author.username }}">{{ post.author.username }}</a>
-							<span class="post-timestamp">{{ post.created_at|date:"Y-m-d-H:i" }}</span>
-						</p>
-						<p>{{ post.content }}</p>
-					</article>
-				{% endfor %}
-			</div>
-			{% if is_paginated %}
-				<nav class="pagination" aria-label="Pagination">
-					{% if page_obj.has_previous %}
-						<a class="pagination-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.previous_page_number }}">Previous</a>
-					{% endif %}
-					<span class="pagination-status">Page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
-					{% if page_obj.has_next %}
-						<a class="pagination-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.next_page_number }}">Next</a>
-					{% endif %}
-				</nav>
-			{% endif %}
-		{% else %}
-			<p>No posts yet.</p>
-		{% endif %}
+		<div id="post-list-container">
+			{% include 'blog/partials/post_list_content.html' %}
+		</div>
 	</section>
 </div>
 {% endblock %}
