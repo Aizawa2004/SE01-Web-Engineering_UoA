@@ -1,0 +1,20 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<section aria-labelledby="posts-heading">
+	<h2 id="posts-heading">{{ page_title }}</h2>
+	{% if posts %}
+		<div class="post-grid">
+			{% for post in posts %}
+				<article class="post-card">
+					<h3>{{ post.title }}</h3>
+					<p class="post-meta">{{ post.title }} by {{ post.author.username }}</p>
+					<p>{{ post.content }}</p>
+				</article>
+			{% endfor %}
+		</div>
+	{% else %}
+		<p>No posts yet.</p>
+	{% endif %}
+</section>
+{% endblock %}
