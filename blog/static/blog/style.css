@@ -184,6 +184,59 @@ button:hover {
 	color: var(--muted);
 }
 
+.layout-shell {
+	display: grid;
+	grid-template-columns: 280px 1fr;
+	gap: 1.25rem;
+	align-items: start;
+}
+
+.filter-panel,
+.author-panel {
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: 0.75rem;
+	padding: 1rem;
+	box-shadow: var(--shadow);
+	margin-bottom: 1rem;
+}
+
+.author-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: grid;
+	gap: 0.5rem;
+}
+
+.author-list a {
+	display: inline-block;
+	padding: 0.4rem 0.65rem;
+	border-radius: 0.45rem;
+	background: #edf3fb;
+	color: var(--accent-strong);
+	text-decoration: none;
+}
+
+.author-list a:hover {
+	background: #dce9f8;
+}
+
+.filter-form select,
+.filter-form input[type="date"],
+.filter-form input[type="search"] {
+	width: 100%;
+	padding: 0.6rem 0.7rem;
+	border: 1px solid var(--border);
+	border-radius: 0.5rem;
+	font: inherit;
+	background: #fff;
+}
+
+.posts-panel h2 {
+	margin-top: 0;
+}
+
 @media (max-width: 600px) {
 	.header-inner {
 		flex-direction: column;
@@ -196,5 +249,9 @@ button:hover {
 
 	main.container {
 		padding-top: 1rem;
+	}
+
+	.layout-shell {
+		grid-template-columns: 1fr;
 	}
 }

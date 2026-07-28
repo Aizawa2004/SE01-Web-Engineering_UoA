@@ -1,20 +1,59 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-<section aria-labelledby="posts-heading">
-	<h2 id="posts-heading">{{ page_title }}</h2>
-	{% if posts %}
-		<div class="post-grid">
-			{% for post in posts %}
-				<article class="post-card">
-					<h3>{{ post.title }}</h3>
-					<p class="post-meta">{{ post.title }} by {{ post.author.username }}</p>
-					<p>{{ post.content }}</p>
-				</article>
-			{% endfor %}
-		</div>
-	{% else %}
-		<p>No posts yet.</p>
-	{% endif %}
-</section>
+<div class="layout-shell">
+	<aside class="filter-panel" aria-labelledby="filter-heading">
+		<h2 id="filter-heading">Filters</h2>
+		<form method="get" class="filter-form form-card">
+			<div class="form-row">
+				<label for="author-filter">Author</label>
+				<select id="author-filter" name="author">
+					<option value="">All authors</option>
+					{% for author in authors %}
+						<option value="{{ author.username }}" {% if selected_author == author.username %}selected{% endif %}>{{ author.username }}</option>
+					{% endfor %}
+				</select>
+			</div>
+			<div class="form-row">
+				<label for="date-filter">Date</label>
+				<input id="date-filter" type="date" name="date" value="{{ selected_date }}">
+			</div>
+			<div class="form-row">
+				<label for="search-filter">Search title</label>
+				<input id="search-filter" type="search" name="q" value="{{ search_query }}" placeholder="Search titles">
+			</div>
+			<button type="submit">Apply filters</button>
+		</form>
+
+		<section aria-labelledby="authors-heading" class="author-panel">
+			<h3 id="authors-heading">Authors</h3>
+			<ul class="author-list">
+				{% for author in authors %}
+					<li><a href="?author={{ author.username }}">{{ author.username }}</a></li>
+				{% empty %}
+					<li>No authors yet.</li>
+				{% endfor %}
+			</ul>
+		</section>
+	</aside>
+
+	<section aria-labelledby="posts-heading" class="posts-panel">
+		<h2 id="posts-heading">{{ page_title }}</h2>
+		{% if posts %}
+			<div class="post-grid">
+				{% for post in posts %}
+					<article class="post-card">
+						<h3>{{ post.title }}</h3>
+						<p class="post-meta">
+							<a href="?author={{ post.author.username }}">{{ post.author.username }}</a>
+						</p>
+						<p>{{ post.content }}</p>
+					</article>
+				{% endfor %}
+			</div>
+		{% else %}
+			<p>No posts yet.</p>
+		{% endif %}
+	</section>
+</div>
 {% endblock %}

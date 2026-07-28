@@ -9,11 +9,42 @@ from .models import Post
 
 
 def post_list(request):
-	posts = Post.objects.select_related("author").all()
+	posts = Post.objects.select_related("author").order_by("-created_at")
+	author_username = request.GET.get("author", "").strip()
+	date_str = request.GET.get("date", "").strip()
+	search_query = request.GET.get("q", "").strip()
+
+	if author_username:
+		posts = posts.filter(author__username=author_username)
+
+	if date_str:
+		try:
+			selected_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+		except ValueError:
+			posts = posts.none()
+		else:
+			posts = posts.filter(created_at__date=selected_date)
+
+	if search_query:
+		posts = posts.filter(title__icontains=search_query)
+
+	authors = (
+		get_user_model()
+		.objects.filter(post__isnull=False)
+		.distinct()
+		.order_by("username")
+	)
 	return render(
 		request,
 		"blog/post_list.html",
-		{"posts": posts, "page_title": "All Posts"},
+		{
+			"posts": posts,
+			"authors": authors,
+			"page_title": "All Posts",
+			"selected_author": author_username,
+			"selected_date": date_str,
+			"search_query": search_query,
+		},
 	)
 
 
