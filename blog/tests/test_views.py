@@ -12,6 +12,7 @@ class PostCreateViewTests(TestCase):
         )
 
     def test_get_renders_empty_form(self):
+        self.client.login(username="alice", password="password123")
         response = self.client.get(reverse("post-create"))
 
         self.assertEqual(response.status_code, 200)
@@ -20,6 +21,7 @@ class PostCreateViewTests(TestCase):
         self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_post_valid_data_saves_post_and_redirects(self):
+        self.client.login(username="alice", password="password123")
         response = self.client.post(
             reverse("post-create"),
             data={"title": "New title", "body": "New body content"},
@@ -31,6 +33,7 @@ class PostCreateViewTests(TestCase):
         self.assertEqual(Post.objects.get(title="New title").content, "New body content")
 
     def test_post_invalid_data_rerenders_form_errors(self):
+        self.client.login(username="alice", password="password123")
         response = self.client.post(
             reverse("post-create"),
             data={"title": "", "body": "New body content"},

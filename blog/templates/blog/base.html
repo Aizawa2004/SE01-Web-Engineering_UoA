@@ -14,7 +14,19 @@
 			<nav aria-label="Primary navigation">
 				<ul class="nav-list">
 					<li><a href="{% url 'post-list' %}">Home</a></li>
-					<li><a href="{% url 'post-create' %}">Create Post</a></li>
+					{% if user.is_authenticated %}
+						<li class="nav-user">Hello, {{ user.username }}</li>
+						<li><a href="{% url 'post-create' %}">Create Post</a></li>
+						<li>
+							<form method="post" action="{% url 'accounts:logout' %}" class="logout-form">
+								{% csrf_token %}
+								<button type="submit" class="logout-button">Logout</button>
+							</form>
+						</li>
+					{% else %}
+						<li><a href="{% url 'accounts:login' %}">Login</a></li>
+						<li><a href="{% url 'accounts:register' %}">Register</a></li>
+					{% endif %}
 				</ul>
 			</nav>
 		</div>

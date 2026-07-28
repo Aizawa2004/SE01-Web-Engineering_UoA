@@ -1,0 +1,27 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<section aria-labelledby="register-heading">
+	<h2 id="register-heading">Register</h2>
+	<form method="post" class="form-card">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+		<div class="form-row">
+			<label for="{{ form.username.id_for_label }}">Username</label>
+			{{ form.username }}
+			{{ form.username.errors }}
+		</div>
+		<div class="form-row">
+			<label for="{{ form.password1.id_for_label }}">Password</label>
+			{{ form.password1 }}
+			{{ form.password1.errors }}
+		</div>
+		<div class="form-row">
+			<label for="{{ form.password2.id_for_label }}">Confirm password</label>
+			{{ form.password2 }}
+			{{ form.password2.errors }}
+		</div>
+		<button type="submit">Register</button>
+	</form>
+</section>
+{% endblock %}
