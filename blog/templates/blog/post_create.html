@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Create Post</title>
+</head>
+<body>
+	<h1>Create Post</h1>
+	<form method="post">
+		{% csrf_token %}
+		{{ form.non_field_errors }}
+		<p>
+			{{ form.title.label_tag }}
+			{{ form.title }}
+			{{ form.title.errors }}
+		</p>
+		<p>
+			{{ form.body.label_tag }}
+			{{ form.body }}
+			{{ form.body.errors }}
+		</p>
+		<button type="submit">Save</button>
+	</form>
+</body>
+</html>

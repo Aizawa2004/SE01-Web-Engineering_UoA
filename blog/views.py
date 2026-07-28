@@ -1,9 +1,11 @@
 from datetime import datetime
 
 from django.contrib.auth import get_user_model
+from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import redirect
 
+from .forms import PostForm
 from .models import Post
 
 
@@ -39,3 +41,24 @@ def post_create_dummy(request):
 		content="This is a dummy post.",
 	)
 	return redirect("post-list")
+
+
+def post_create(request):
+	if request.method == "POST":
+		form = PostForm(request.POST)
+		if form.is_valid():
+			author = get_user_model().objects.order_by("id").first()
+			if author is None:
+				author = get_user_model().objects.create_user(
+					username="anonymous", password="password123"
+				)
+			Post.objects.create(
+				author=author,
+				title=form.cleaned_data["title"],
+				content=form.cleaned_data["body"],
+			)
+			return redirect("post-list")
+	else:
+		form = PostForm()
+
+	return render(request, "blog/post_create.html", {"form": form})
