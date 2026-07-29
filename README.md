@@ -6,22 +6,6 @@ Click on the URL to see this project in action.**
 
 Shared blog platform project using Django + HTMX.
 
-## Current Development Phase
-
-This repository is currently in specification and AI-tooling hardening phase.
-
-In scope now:
-
-- Requirements and architecture hardening
-- Agent and skill tuning
-- Development workflow documentation
-
-Out of scope now:
-
-- Django scaffolding creation
-- Application code implementation
-- Database migration execution
-
 ## Product Goals
 
 - Users can register and create posts.
