@@ -1,194 +1,146 @@
 # render.com
-**[The Blog](https://theblog-se01-web-engineering-uoa.onrender.com)
-Click on the URL to see this project in action.**
 
-# The Blogs
+**[The Blog](https://theblog-se01-web-engineering-uoa.onrender.com)**
+**Click on the URL to see this project in action.**
 
-Shared blog platform project using Django + HTMX.
+# The Blog
 
-## Product Goals
+A shared blog platform web application built using Django + HTMX, managed via the `uv` package manager.
 
-- Users can register and create posts.
-- Posts are listed in reverse chronological order.
-- Users can filter by author.
-- Users can filter by date.
-- Users can search by title keyword.
-- Pagination works with clear previous/next navigation.
+## Product Goals & Features
 
-See the detailed implementation policy in [AGENTS.md](AGENTS.md).
+* **User Authentication**: Secure registration, login, and logout capabilities.
+* **CRUD Operations**: Authenticated users can create, read, update, and delete blog posts and comments.
+* **Dynamic Filtering & Search**:
+* Filter posts by author.
+* Filter posts by date.
+* Search posts by title keyword.
 
-## Environment
 
-- Python: 3.11+
-- Package manager: uv
-- Framework: Django 5.x (already added as dependency)
-- Quality tools: Ruff, Coverage
+* **Asynchronous UX (HTMX)**: Incremental search and dynamic list updates without full-page reloads, with full-page fallbacks.
+* **Pagination**: Smooth navigation with previous/next controls.
 
-## Local Setup (macOS / Linux)
+## Environment & Tech Stack
 
-1. Clone and enter repository.
-2. Create virtual environment.
-3. Activate virtual environment.
-4. Install dependencies.
+* **Python**: 3.11+
+* **Package Manager**: `uv`
+* **Framework**: Django 5.2+
+* **Frontend / Async**: HTMX (`django-htmx`)
+* **Production Server**: Waitress
+* **Static File Serving**: WhiteNoise
+* **Quality & Testing Tools**: Ruff (Linting), Coverage (`coverage.py`), Django Test Suite (31 tests passing)
 
+## Local Setup & Quickstart
+
+1. Clone the repository and enter the directory:
 ```bash
 git clone <your-github-repo-url>
-cd the-blogs
+cd TheBlog
+```
+
+
+2. Create and activate the virtual environment using `uv`:
+```bash
 uv venv
 source .venv/bin/activate
+```
+
+3. Install dependencies:
+```bash
 uv sync
 ```
 
-## Development Commands
 
-Commands available now (no Django scaffold required):
+4. Run database migrations:
+```bash
+uv run python manage.py migrate
+```
+
+5. Start the development server:
+```bash
+uv run python manage.py runserver
+```
+
+
+6. Open `[http://127.0.0.1:8000/](http://127.0.0.1:8000/)` in your browser.
+
+## Development & Quality Commands
+
+To maintain code quality and verify functionality, use the following commands:
 
 ```bash
-# Lint check
+# Run static code analysis (Linter)
 uv run ruff check .
 
-# Optional auto-fix
-uv run ruff check . --fix
-
-# Format (if you choose to use Ruff formatter)
-uv run ruff format .
-```
-
-Planned commands for Day 1+ (after Django project is created):
-
-```bash
-# Run development server
-uv run python manage.py runserver
-
-# Create and apply migrations
-uv run python manage.py makemigrations
-uv run python manage.py migrate
-
-# Run tests
+# Run the complete test suite (31 tests)
 uv run python manage.py test
+
+# Run tests with coverage measurement
+uv run coverage run --source='.' manage.py test
+uv run coverage report
 ```
 
-## Testing Strategy (Planned)
+## HTMX Strategy & Implementation
 
-The first implementation milestone should include test coverage for:
+* **URL-Query Driven**: List rendering and filtering state are tied to URL query parameters (`q`, `author`, `date`, `page`).
+* **Partial Responses**: The views check `request.htmx` to return partial HTML templates (`post_list_content.html`) for asynchronous updates, while returning the full page (`post_list.html`) for normal requests.
+* **URL History Push**: `hx-push-url="true"` is utilized on dynamic interactions to ensure browser history, back/forward navigation, and bookmarks function correctly.
 
-- Post ordering (newest first)
-- Author filter
-- Date filter
-- Title keyword search
-- Pagination behavior
-- Authentication guard for write actions
+## Security Measures
 
-Coverage policy can be tightened after test suite lands.
-
-## HTMX Strategy
-
-- Keep list rendering URL-query driven.
-- Use partial template responses for HTMX requests.
-- Preserve full-page fallback for non-JS clients.
-
-Recommended list query keys:
-
-- author
-- date
-- q
-- page
-
-## Security Checklist
-
-- Use Django ORM for user-driven queries.
-- Include CSRF token for all forms and HTMX POSTs.
-- Keep logout as POST.
-- Validate query params before applying filters.
-- Keep secrets in environment variables.
-
-## AI Workflow Notes
-
-This repository includes skill definitions under [.agents/skills](.agents/skills) and project rules in [AGENTS.md](AGENTS.md).
-
-Recommended usage:
-
-1. Confirm scope in AGENTS before code generation.
-2. Use Django-related skills for model/view/template decisions.
-3. Validate output against URL policy, template split policy, and security requirements.
+* **ORM Protection**: Uses Django ORM to protect against SQL injection.
+* **CSRF Protection**: Comprehensive CSRF token integration across forms and HTMX requests.
+* **Authentication Guards**: Write actions (creating/deleting posts) are protected by login required decorators/mixins.
+* **Method Restrictions**: Logout is strictly restricted to `POST` requests to prevent cross-site request forgery.
+* **Environment Isolation**: Secrets and host configs are strictly handled via environment variables.
 
 ## Deployment Guide
 
 ### Local Production Simulation
 
-Use these steps to run the app locally in a production-like mode.
+To test the production behavior locally:
 
-1. Install dependencies.
-
+1. Install dependencies:
 ```bash
 uv sync
 ```
 
-2. Collect static files for WhiteNoise.
-
+2. Collect static files for WhiteNoise:
 ```bash
 uv run python manage.py collectstatic --noinput
 ```
 
-3. Apply database migrations.
-
+3. Run database migrations:
 ```bash
 uv run python manage.py migrate
 ```
 
-4. Start the production WSGI server (Waitress).
-
+4. Start the production WSGI server (Waitress):
 ```bash
-uv run waitress-serve --port=8000 config.wsgi:application
+waitress-serve --port=8000 config.wsgi:application
 ```
 
-5. Open the app at http://127.0.0.1:8000
 
-Recommended environment variables for local production simulation:
-
-```bash
-export DEBUG=False
-export SECRET_KEY="replace-with-a-strong-secret"
-export ALLOWED_HOSTS="127.0.0.1,localhost"
-```
-
-Optional database variables (non-SQLite setups):
-
-```bash
-export DB_ENGINE="django.db.backends.postgresql"
-export DB_NAME="your_db_name"
-export DB_USER="your_db_user"
-export DB_PASSWORD="your_db_password"
-export DB_HOST="your_db_host"
-export DB_PORT="5432"
-```
 
 ### External Hosting (Render.com)
 
 1. Push your repository to GitHub.
-2. In Render, click New + and choose Web Service.
-3. Connect your GitHub repository and select this project.
-4. Configure Render service settings:
-	- Runtime: Python 3
-	- Build Command:
-
+2. Create a new Web Service on Render and connect your repository.
+3. Configure settings:
+* **Runtime**: Python 3
+* **Build Command**:
 ```bash
 uv sync && uv run python manage.py collectstatic --noinput && uv run python manage.py migrate
 ```
 
-	- Start Command:
-
+* **Start Command**:
 ```bash
 waitress-serve --port=$PORT config.wsgi:application
 ```
 
-5. Set environment variables in Render:
-	- DEBUG=False
-	- SECRET_KEY=<strong-random-secret>
-	- ALLOWED_HOSTS=<your-render-domain>
-	- DB_ENGINE, DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT (if using external DB)
 
-Notes:
-- Render may also use equivalent commands with pip/venv if your runtime is not uv-based.
-- Always keep DEBUG=False in production.
-- After deploy, verify static assets load correctly and basic pages respond as expected.
+4. Set required Environment Variables on Render:
+* `DEBUG` = `False`
+* `SECRET_KEY` = `<strong-random-secret>`
+* `ALLOWED_HOSTS` = `theblog-se01-web-engineering-uoa.onrender.com`
+* `CSRF_TRUSTED_ORIGINS` = `[https://theblog-se01-web-engineering-uoa.onrender.com](https://theblog-se01-web-engineering-uoa.onrender.com)`
